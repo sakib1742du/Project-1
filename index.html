@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakib's English Books | ইংরেজি শেখার বই</title>
+<style>
+  :root { --main:#1b4f72; --accent:#2e86c1; --light:#f4f8fb; --wa:#25d366; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family: 'Segoe UI', 'Noto Sans Bengali', Arial, sans-serif; color:#222; line-height:1.6; background:#fff; }
+  header { background:var(--main); color:#fff; padding:14px 20px; position:sticky; top:0; z-index:10; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:20px; }
+  nav a { color:#fff; text-decoration:none; margin-left:16px; font-size:15px; }
+  nav a:hover { text-decoration:underline; }
+  .hero { background:linear-gradient(135deg,var(--main),var(--accent)); color:#fff; text-align:center; padding:70px 20px; }
+  .hero h2 { font-size:32px; margin-bottom:12px; }
+  .hero p { font-size:18px; max-width:620px; margin:0 auto 24px; }
+  .btn { display:inline-block; padding:12px 26px; border-radius:6px; text-decoration:none; font-weight:600; border:none; cursor:pointer; font-size:16px; }
+  .btn-wa { background:var(--wa); color:#fff; }
+  .btn-light { background:#fff; color:var(--main); }
+  section { padding:50px 20px; max-width:1000px; margin:0 auto; }
+  section h2 { color:var(--main); margin-bottom:20px; text-align:center; }
+  .categories { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:30px; }
+  .cat-btn { padding:9px 20px; border:2px solid var(--accent); background:#fff; color:var(--accent); border-radius:30px; cursor:pointer; font-size:15px; font-weight:600; }
+  .cat-btn.active, .cat-btn:hover { background:var(--accent); color:#fff; }
+  .books { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:20px; }
+  .book { background:var(--light); border-radius:10px; padding:18px; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+  .book img { width:100%; border-radius:6px; margin-bottom:10px; }
+  .book h3 { color:var(--main); font-size:18px; margin-bottom:6px; }
+  .book .price { font-weight:700; color:var(--accent); margin:8px 0; }
+  .empty { text-align:center; color:#777; padding:30px; background:var(--light); border-radius:10px; }
+  .about { background:var(--light); max-width:none; }
+  .about-inner { max-width:800px; margin:0 auto; text-align:center; }
+  .how { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+  .step { flex:1 1 200px; background:var(--light); padding:20px; border-radius:10px; text-align:center; }
+  .step b { display:block; font-size:28px; color:var(--accent); }
+  footer { background:var(--main); color:#fff; text-align:center; padding:24px 20px; }
+  .wa-float { position:fixed; bottom:20px; right:20px; background:var(--wa); color:#fff; padding:14px 18px; border-radius:50px; text-decoration:none; font-weight:700; box-shadow:0 3px 10px rgba(0,0,0,.25); z-index:20; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Sakib's English Books</h1>
+  <nav>
+    <a href="#books">বই</a>
+    <a href="#how">কীভাবে কিনবেন</a>
+    <a href="#about">পরিচিতি</a>
+    <a href="#contact">যোগাযোগ</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h2>সহজ ইংরেজি, আত্মবিশ্বাসী আপনি<br><small style="font-size:20px;font-weight:400">Learn English the simple way</small></h2>
+  <p>প্রাপ্তবয়স্ক শিক্ষার্থীদের জন্য সহজ ভাষায় লেখা ইংরেজি শেখার বই। কিনতে সরাসরি হোয়াটসঅ্যাপে যোগাযোগ করুন।</p>
+  <a class="btn btn-light" href="#books">বইগুলো দেখুন</a>
+</div>
+
+<section id="books">
+  <h2>আমাদের বই / Our Books</h2>
+
+  <div class="categories" id="categories">
+    <button class="cat-btn active" data-cat="all">সব / All</button>
+    <button class="cat-btn" data-cat="grammar">গ্রামার / Grammar</button>
+    <button class="cat-btn" data-cat="speaking">স্পোকেন ইংলিশ / Spoken English</button>
+    <button class="cat-btn" data-cat="vocabulary">ভোকাবুলারি / Vocabulary</button>
+    <button class="cat-btn" data-cat="writing">রাইটিং / Writing</button>
+    <button class="cat-btn" data-cat="exam">পরীক্ষার প্রস্তুতি / Exam Prep</button>
+    <button class="cat-btn" data-cat="job">চাকরি ও ইন্টারভিউ / Job &amp; Interview</button>
+  </div>
+
+  <div class="books" id="bookList"></div>
+  <div class="empty" id="emptyMsg">এই ক্যাটাগরিতে শিগগিরই বই আসছে। / Books coming soon in this category.</div>
+</section>
+
+<section id="how">
+  <h2>কীভাবে কিনবেন / How to Buy</h2>
+  <div class="how">
+    <div class="step"><b>১</b>পছন্দের বইয়ের নিচে "হোয়াটসঅ্যাপে অর্ডার করুন" বাটনে ক্লিক করুন</div>
+    <div class="step"><b>২</b>হোয়াটসঅ্যাপে আমার সাথে কথা বলে পেমেন্ট করুন</div>
+    <div class="step"><b>৩</b>পেমেন্টের পর বই হোয়াটসঅ্যাপে পেয়ে যাবেন</div>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <div class="about-inner">
+    <h2>আমার সম্পর্কে / About Me</h2>
+    <p>আমি সাকিব, একজন ইংরেজি শিক্ষক। শিক্ষার্থীদের সাথে কাজ করার অভিজ্ঞতা থেকে আমি এমন বই বানাই, যা কঠিন নিয়ম মুখস্থ না করিয়ে সহজ উদাহরণে ইংরেজি শেখায়।</p>
+  </div>
+</section>
+
+<section id="contact" style="text-align:center">
+  <h2>যোগাযোগ / Contact</h2>
+  <p style="margin-bottom:18px">কোনো প্রশ্ন থাকলে বা বই কিনতে চাইলে সরাসরি হোয়াটসঅ্যাপে মেসেজ করুন।</p>
+  <a class="btn btn-wa" id="contactWa" href="#" target="_blank">💬 হোয়াটসঅ্যাপে মেসেজ করুন</a>
+</section>
+
+<footer>© 2026 Sakib's English Books. সর্বস্বত্ব সংরক্ষিত।</footer>
+
+<a class="wa-float" id="floatWa" href="#" target="_blank">💬 WhatsApp</a>
+
+<script>
+  // ====== সেটিংস: এখানে শুধু এই অংশ বদলালেই চলবে ======
+  const WHATSAPP_NUMBER = "8801871533948";
+
+  // বই যোগ করতে নিচের তালিকায় এই ফরম্যাটে লাইন বসাও:
+  // { title:"বইয়ের নাম", category:"grammar", price:"১৫০ টাকা", desc:"ছোট বিবরণ", image:"ছবির লিংক বা ফাঁকা" },
+  // category হবে: grammar, speaking, vocabulary, writing, exam, job
+  const BOOKS = [
+  ];
+  // ===================================================
+
+  const listEl = document.getElementById('bookList');
+  const emptyEl = document.getElementById('emptyMsg');
+
+  function waLink(text){ return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text); }
+
+  function render(cat){
+    listEl.innerHTML = "";
+    const items = BOOKS.filter(b => cat === "all" || b.category === cat);
+    emptyEl.style.display = items.length ? "none" : "block";
+    items.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'book';
+      div.innerHTML =
+        (b.image ? '<img src="' + b.image + '" alt="' + b.title + '">' : '') +
+        '<h3>' + b.title + '</h3>' +
+        '<p>' + (b.desc || '') + '</p>' +
+        (b.price ? '<div class="price">' + b.price + '</div>' : '') +
+        '<a class="btn btn-wa" target="_blank" href="' + waLink('আসসালামু আলাইকুম, আমি "' + b.title + '" বইটি কিনতে চাই।') + '">হোয়াটসঅ্যাপে অর্ডার করুন</a>';
+      listEl.appendChild(div);
+    });
+  }
+
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
+      btn.classList.add('active');
+      render(btn.dataset.cat);
+    });
+  });
+
+  const generalMsg = waLink("আসসালামু আলাইকুম, আমি আপনার ইংরেজি বই সম্পর্কে জানতে চাই।");
+  document.getElementById('contactWa').href = generalMsg;
+  document.getElementById('floatWa').href = generalMsg;
+
+  render('all');
+</script>
+</body>
+</html>

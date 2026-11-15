@@ -45,6 +45,8 @@
   .btn-fill:hover { background:var(--gold-dark); }
   .btn-outline { background:#fff; color:var(--navy); border-color:var(--navy); }
   .btn-outline:hover { background:#eef2f9; }
+  .btn-free { background:#2e9e5b; color:#fff; border-color:#2e9e5b; }
+  .btn-free:hover { background:#25834b; }
 
   .sec-title { text-align:center; font-size:24px; margin:44px 0 22px; }
   .sec-title.light { font-weight:500; }
@@ -59,10 +61,11 @@
   .books { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr)); gap:22px; }
   .book { background:#fff; border-radius:12px; padding:20px; display:flex; gap:20px; align-items:center; position:relative; }
   .book .pic { flex:0 0 130px; height:150px; border-radius:8px; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:48px; overflow:hidden; }
-  .book .pic img { width:100%; height:100%; object-fit:contain; }
+  .book .pic img { width:100%; height:100%; object-fit:cover; }
   .book h3 { font-size:18px; font-weight:500; margin-bottom:6px; }
   .book .desc { font-size:14px; color:#667; margin-bottom:8px; }
   .price { color:var(--gold-dark); font-weight:700; font-size:20px; }
+  .price.free { color:#2e9e5b; }
   .old { color:#8a8a8a; text-decoration:line-through; font-size:16px; margin-left:12px; font-weight:400; }
   .save { display:inline-block; background:#c9e265; color:#243; font-size:12px; font-weight:600; padding:1px 10px; border-radius:20px; margin:6px 0; }
   .btns { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
@@ -105,6 +108,7 @@
     <button data-cat='speaking'>স্পোকেন ইংলিশ</button>
     <button data-cat='vocabulary'>ভোকাবুলারি</button>
     <button data-cat='writing'>রাইটিং</button>
+    <button data-cat='reading'>রিডিং</button>
     <button data-cat='exam'>পরীক্ষার প্রস্তুতি</button>
     <button data-cat='job'>চাকরি ও ইন্টারভিউ</button>
   </div>
@@ -130,6 +134,7 @@
     <div class='cat' data-cat='speaking'><div class='box'>🗣️</div><p>স্পোকেন ইংলিশ</p></div>
     <div class='cat' data-cat='vocabulary'><div class='box'>🔤</div><p>ভোকাবুলারি</p></div>
     <div class='cat' data-cat='writing'><div class='box'>✍️</div><p>রাইটিং</p></div>
+    <div class='cat' data-cat='reading'><div class='box'>📚</div><p>রিডিং</p></div>
     <div class='cat' data-cat='exam'><div class='box'>🎯</div><p>পরীক্ষার প্রস্তুতি</p></div>
     <div class='cat' data-cat='job'><div class='box'>💼</div><p>চাকরি ও ইন্টারভিউ</p></div>
   </div>
@@ -159,10 +164,11 @@
   // ====== সেটিংস: শুধু এই অংশ বদলালেই চলবে ======
   const WHATSAPP_NUMBER = '8801871533948';
 
-  // বই যোগ করতে নিচের তালিকায় এই ফরম্যাটে লাইন বসাও (কমা দিয়ে আলাদা করো):
-  // { title:'বইয়ের নাম', category:'grammar', price:150, oldPrice:200, desc:'ছোট বিবরণ', image:'ছবির লিংক', badge:'Best Selling' },
-  // category হবে: grammar, speaking, vocabulary, writing, exam, job
+  // বিক্রির বই: { title:'বইয়ের নাম', category:'grammar', price:150, oldPrice:200, desc:'ছোট বিবরণ', image:'ছবির ফাইলের নাম', badge:'Best Selling' },
+  // ফ্রি বই: { title:'বইয়ের নাম', category:'reading', free:true, pdf:'file-name.pdf', desc:'ছোট বিবরণ', image:'cover.png', badge:'ফ্রি' },
+  // category হবে: grammar, speaking, vocabulary, writing, reading, exam, job
   const BOOKS = [
+    { title:'ইংলিশ শর্ট স্টোরি', category:'reading', free:true, pdf:'bubble-tree-story-1.pdf', desc:'সহজ ইংরেজিতে মজার ছোট গল্প। বিনামূল্যে ডাউনলোড করুন।', image:'bubble-tree-cover.png', badge:'ফ্রি' },
   ];
   // ===================================================
 
@@ -184,19 +190,33 @@
     items.forEach(b => {
       const div = document.createElement('div');
       div.className = 'book';
-      const save = (b.oldPrice && b.oldPrice > b.price) ? '<div class="save">সাশ্রয় ' + taka(b.oldPrice - b.price) + '</div>' : '';
+      const save = (!b.free && b.oldPrice && b.oldPrice > b.price) ? '<div class="save">সাশ্রয় ' + taka(b.oldPrice - b.price) + '</div>' : '';
+      let priceHtml = '';
+      if (b.free) {
+        priceHtml = '<div class="price free">সম্পূর্ণ ফ্রি</div>';
+      } else if (b.price) {
+        priceHtml = '<div class="price">' + taka(b.price) + (b.oldPrice ? '<span class="old">' + taka(b.oldPrice) + '</span>' : '') + '</div>';
+      }
+      const askLink = waLink('আসসালামু আলাইকুম, "' + b.title + '" বইটি সম্পর্কে জানতে চাই।');
+      let buttons = '';
+      if (b.free && b.pdf) {
+        buttons =
+          '<a class="btn btn-free" href="' + b.pdf + '" download target="_blank">ডাউনলোড করুন</a>' +
+          '<a class="btn btn-outline" target="_blank" href="' + askLink + '">প্রশ্ন করুন</a>';
+      } else {
+        buttons =
+          '<a class="btn btn-outline" target="_blank" href="' + askLink + '">প্রশ্ন করুন</a>' +
+          '<a class="btn btn-fill" target="_blank" href="' + waLink('আসসালামু আলাইকুম, আমি "' + b.title + '" বইটি কিনতে চাই।') + '">অর্ডার করুন</a>';
+      }
       div.innerHTML =
         (b.badge ? '<div class="badge">' + b.badge + '</div>' : '') +
         '<div class="pic">' + (b.image ? '<img src="' + b.image + '" alt="">' : '📖') + '</div>' +
         '<div>' +
           '<h3>' + b.title + '</h3>' +
           (b.desc ? '<p class="desc">' + b.desc + '</p>' : '') +
-          (b.price ? '<div class="price">' + taka(b.price) + (b.oldPrice ? '<span class="old">' + taka(b.oldPrice) + '</span>' : '') + '</div>' : '') +
+          priceHtml +
           save +
-          '<div class="btns">' +
-            '<a class="btn btn-outline" target="_blank" href="' + waLink('আসসালামু আলাইকুম, "' + b.title + '" বইটি সম্পর্কে জানতে চাই।') + '">প্রশ্ন করুন</a>' +
-            '<a class="btn btn-fill" target="_blank" href="' + waLink('আসসালামু আলাইকুম, আমি "' + b.title + '" বইটি কিনতে চাই।') + '">অর্ডার করুন</a>' +
-          '</div>' +
+          '<div class="btns">' + buttons + '</div>' +
         '</div>';
       listEl.appendChild(div);
     });
